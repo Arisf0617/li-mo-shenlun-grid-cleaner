@@ -7,7 +7,7 @@ const resultCanvas = document.createElement('canvas');
 const display = $('canvas'), context = display.getContext('2d');
 let renderTimer, toastTimer;
 function toast(message) { $('toast').textContent=message; $('toast').hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>$('toast').hidden=true,7000); }
-function setBusy(active,label='正在处理',percent=0) { state.busy=active; $('busy').hidden=!active; $('busyLabel').textContent=label; $('progress').value=percent; $('export').disabled=active||!state.ready; for(const id of ['openTop','openEmpty','cameraTop']) $(id).disabled=active; }
+function setBusy(active,label='正在处理',percent=0) { state.busy=active; $('busy').hidden=!active; $('busyLabel').textContent=label; $('progress').value=percent; $('export').disabled=active||!state.ready; for(const id of ['openTop','openEmpty','cameraTop','cameraEmpty']) $(id).disabled=active; }
 function options(maskView=state.mask) { return {mode:document.querySelector('input[name=mode]:checked').value,strength:+$('strength').value,protection:+$('protection').value,whiten:+$('whiten').value,edits:state.edits,maskView}; }
 function enableControls(enabled) { for(const id of ['strength','protection','whiten','pan','protect','erase','maskToggle','zoomOut','zoomIn','fit','actual','rotateLeft','rotateRight']) $(id).disabled=!enabled; $('export').disabled=!enabled||state.busy; $('undo').disabled=!enabled||!state.undo.length; }
 function updateProgress(percent,label) { $('progress').value=percent; $('busyLabel').textContent=label; }
@@ -75,6 +75,8 @@ function rotateImage(degrees){
 for(const [id,degrees] of [['rotateLeft',-90],['rotateRight',90]])$(id).addEventListener('click',()=>rotateImage(degrees));
 for(const id of ['openTop','openEmpty'])$(id).addEventListener('click',()=>$('fileInput').click());
 $('cameraTop').addEventListener('click',()=>{if(window.AndroidBridge?.takePhoto){window.AndroidBridge.takePhoto();return;}$('cameraFile').click();});
+function requestCamera(){if(window.AndroidBridge?.takePhoto){window.AndroidBridge.takePhoto();return;}$('cameraFile').click();}
+$('cameraEmpty').addEventListener('click',requestCamera);
 $('fileInput').addEventListener('change',event=>{openFile(event.target.files[0]);event.target.value='';});
 $('cameraFile').addEventListener('change',event=>{openFile(event.target.files[0]);event.target.value='';});
 window.receiveCameraPhoto=url=>openImage(url,'相机拍摄.jpg');

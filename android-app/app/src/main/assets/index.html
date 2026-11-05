@@ -43,7 +43,7 @@
     <div class="workspace">
       <div class="viewer-top"><div class="file-meta"><span class="file-dot"></span><span id="filename">尚未打开图片</span><small id="dimensions"></small></div><div class="view-tabs"><button data-view="result" class="active">处理效果</button><button data-view="compare">滑动对照</button><button data-view="original">原图</button></div></div>
       <div class="canvas-area" id="stage">
-        <div id="empty" class="empty-state"><div class="paper-icon"><span>文</span></div><h2>把卷面放到这里</h2><p>拖入或粘贴一张照片，开始去除红色格线</p><button id="openEmpty" class="button primary">选择图片</button><small>支持 JPG、PNG、WebP、BMP · 全程在本机处理</small></div>
+        <div id="empty" class="empty-state"><div class="paper-icon"><span>文</span></div><h2>把卷面放到这里</h2><p>拖入或粘贴一张照片，开始去除红色格线</p><div class="empty-actions"><button id="openEmpty" class="button primary">选择图片</button><button id="cameraEmpty" class="button secondary">拍照</button></div><small>支持 JPG、PNG、WebP、BMP · 全程在本机处理</small></div>
         <canvas id="canvas" hidden aria-label="卷面图片预览"></canvas>
         <div id="compareLabels" class="compare-labels" hidden><span>原图</span><span>去格后</span></div>
         <div id="busy" class="busy" hidden><div class="spinner"></div><strong id="busyLabel">正在处理</strong><progress id="progress" max="100" value="0"></progress><span>不识别文字，只处理图像像素</span></div>

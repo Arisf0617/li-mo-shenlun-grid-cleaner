@@ -37,14 +37,33 @@ public final class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window window = getWindow();
-        window.setStatusBarColor(android.graphics.Color.rgb(36, 75, 70));
-        window.setNavigationBarColor(android.graphics.Color.rgb(244, 243, 239));
-        if (Build.VERSION.SDK_INT >= 26) {
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        if (Build.VERSION.SDK_INT >= 30) {
+            window.setDecorFitsSystemWindows(false);
+            window.setStatusBarColor(android.graphics.Color.TRANSPARENT);
+            window.setNavigationBarColor(android.graphics.Color.TRANSPARENT);
+            window.getInsetsController().setSystemBarsAppearance(
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                            | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                            | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+        } else {
+            window.setStatusBarColor(android.graphics.Color.rgb(36, 75, 70));
+            window.setNavigationBarColor(android.graphics.Color.rgb(244, 243, 239));
+            if (Build.VERSION.SDK_INT >= 26) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
         }
 
         webView = new WebView(this);
         webView.setBackgroundColor(android.graphics.Color.rgb(244, 243, 239));
+        if (Build.VERSION.SDK_INT >= 30) {
+            webView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
+                android.graphics.Insets systemBars = windowInsets.getInsets(
+                        android.view.WindowInsets.Type.systemBars() | android.view.WindowInsets.Type.displayCutout());
+                view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return windowInsets;
+            });
+        }
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(false);
@@ -102,6 +121,7 @@ public final class MainActivity extends Activity {
             }
         });
         setContentView(webView);
+        webView.requestApplyInsets();
         Uri assetUri = Uri.parse("https://appassets.androidplatform.net/assets/index.html");
         webView.loadUrl(assetUri.toString());
     }
