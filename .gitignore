@@ -1,0 +1,14 @@
+# User-provided handwriting samples and local validation artifacts
+sample-data.js
+android-app/app/src/main/assets/sample-data.js
+local-private/
+验证结果/
+tools/verify*.cjs
+tools/benchmark.cjs
+
+# Generated distributables and local Android SDK configuration
+留墨.html
+留墨-Android.apk
+android-app/local.properties
+android-app/.gradle/
+android-app/**/build/

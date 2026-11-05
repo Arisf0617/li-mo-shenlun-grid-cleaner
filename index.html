@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file: blob: data:; script-src 'self' file:; style-src 'self' file:; img-src 'self' file: blob: data:; worker-src 'self' file: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>留墨 · 申论去红格</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="grid-core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">墨</span><div><strong>留墨</strong><span>申论卷面 · 去红格工具</span></div></div>
+    <div class="privacy"><i></i>本机处理，无 OCR，无图片上传</div>
+    <button id="cameraTop" class="button secondary" title="使用相机拍摄卷面">拍照</button>
+    <button id="openTop" class="button secondary">打开图片</button>
+    <button id="export" class="button primary" disabled>导出 PNG <span>↗</span></button>
+  </header>
+  <main>
+    <aside class="sidebar">
+      <div class="intro"><p class="eyebrow">让注意力回到文字</p><h1>褪去格线，<br>留下你的笔迹。</h1><p>直接处理原图像素，保留字形、位置、间距与行文布局。</p></div>
+      <section>
+        <h2>01 <span>选择呈现方式</span></h2>
+        <label class="mode-card selected"><input type="radio" name="mode" value="white" checked><span><strong>白纸阅卷</strong><small>去格后提亮纸面，保留连续灰阶笔触</small></span><b>◉</b></label>
+        <label class="mode-card"><input type="radio" name="mode" value="original"><span><strong>仅去红格</strong><small>保留原图色调，非处理像素保持原值</small></span><b>○</b></label>
+      </section>
+      <section class="controls">
+        <h2>02 <span>微调处理效果</span></h2>
+        <label class="range-label" for="strength">去格强度 <output id="strengthValue">100</output></label><input id="strength" type="range" min="50" max="140" value="100" disabled><div class="range-ends"><span>更柔和</span><span>更干净</span></div>
+        <label class="range-label" for="protection">笔迹保护 <output id="protectionValue">65</output></label><input id="protection" type="range" min="0" max="100" value="65" disabled><div class="range-ends"><span>平衡</span><span>优先保留淡笔迹</span></div>
+        <div id="whiteControls"><label class="range-label" for="whiten">纸面提白 <output id="whitenValue">10</output></label><input id="whiten" type="range" min="0" max="20" value="10" disabled><div class="range-ends"><span>柔和纸面</span><span>纯白纸面</span></div></div>
+      </section>
+      <section>
+        <h2>03 <span>局部修正</span><em>可选</em></h2>
+        <div class="tools"><button id="pan" class="tool active" data-tool="pan" disabled>↔ 拖动画面</button><button id="protect" class="tool" data-tool="protect" disabled>✎ 保护笔迹</button><button id="erase" class="tool" data-tool="erase" disabled>⌫ 清除残线</button><button id="undo" class="tool" disabled>↶ 撤销修正</button></div>
+        <div class="brush-row"><label for="brush">笔刷 <output id="brushValue">14 px</output></label><input id="brush" type="range" min="2" max="80" value="14" disabled></div>
+        <p class="hint">保护笔迹可恢复局部原图笔画；清除残线会擦去刷过区域，请避开文字。</p>
+      </section>
+      <details><summary>关于“保留原笔迹”</summary><p>程序没有文字识别、字体替换或生成式重绘。它只分离图像中的印刷格线与深色笔画。白纸模式额外调整纸色和明暗；如需尽量保持原始像素，请用“仅去红格”。</p><p>暗红线与淡笔画完全重叠时，单张照片不能保证无损分离。请放大检查，使用“保护笔迹”恢复有疑问的位置。红色手写内容也可能与格线相近，请手动保护。</p></details>
+      <footer>原尺寸导出 · 不裁切、不拉伸、不自动排版</footer>
+    </aside>
+    <div class="workspace">
+      <div class="viewer-top"><div class="file-meta"><span class="file-dot"></span><span id="filename">尚未打开图片</span><small id="dimensions"></small></div><div class="view-tabs"><button data-view="result" class="active">处理效果</button><button data-view="compare">滑动对照</button><button data-view="original">原图</button></div></div>
+      <div class="canvas-area" id="stage">
+        <div id="empty" class="empty-state"><div class="paper-icon"><span>文</span></div><h2>把卷面放到这里</h2><p>拖入或粘贴一张照片，开始去除红色格线</p><button id="openEmpty" class="button primary">选择图片</button><small>支持 JPG、PNG、WebP、BMP · 全程在本机处理</small></div>
+        <canvas id="canvas" hidden aria-label="卷面图片预览"></canvas>
+        <div id="compareLabels" class="compare-labels" hidden><span>原图</span><span>去格后</span></div>
+        <div id="busy" class="busy" hidden><div class="spinner"></div><strong id="busyLabel">正在处理</strong><progress id="progress" max="100" value="0"></progress><span>不识别文字，只处理图像像素</span></div>
+        <div id="dropOverlay" class="drop-overlay" hidden>松开，打开这张卷面</div>
+      </div>
+      <div id="compareControl" class="compare-control" hidden><span>原图</span><input id="split" type="range" min="0" max="100" value="50" aria-label="原图与效果分界"><span>去格后</span></div>
+      <div class="viewer-bottom"><span id="status">等待图片</span><div class="zoom-controls"><button id="rotateLeft" title="向左旋转 90 度" aria-label="向左旋转 90 度" disabled>↶</button><button id="rotateRight" title="向右旋转 90 度" aria-label="向右旋转 90 度" disabled>↷</button><button id="maskToggle" disabled>显示处理区域</button><button id="zoomOut" title="缩小" disabled>−</button><span id="zoomLabel">—</span><button id="zoomIn" title="放大" disabled>＋</button><button id="fit" disabled>适应</button><button id="actual" disabled>1:1</button></div></div>
+      <div class="notice">保留手写的每一处个性。处理后请放大检查细笔画与格线交叉处。</div>
+    </div>
+  </main>
+  <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" hidden>
+  <input id="cameraFile" type="file" accept="image/*" capture="environment" hidden>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

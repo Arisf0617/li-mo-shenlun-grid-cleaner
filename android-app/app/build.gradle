@@ -1,0 +1,28 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'cn.liumo.essay'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'cn.liumo.essay'
+        minSdk 26
+        targetSdk 35
+        versionCode 4
+        versionName '1.3'
+    }
+
+    sourceSets {
+        main {
+            assets {
+                exclude 'sample-data.js'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
