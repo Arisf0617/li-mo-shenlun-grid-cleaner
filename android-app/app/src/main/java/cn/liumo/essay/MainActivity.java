@@ -17,6 +17,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import androidx.webkit.WebViewAssetLoader;
 import androidx.core.content.FileProvider;
@@ -53,12 +54,14 @@ public final class MainActivity extends Activity {
 
         webView = new WebView(this);
         webView.setBackgroundColor(android.graphics.Color.rgb(244, 243, 239));
+        FrameLayout appRoot = new FrameLayout(this);
+        appRoot.setBackgroundColor(android.graphics.Color.rgb(244, 243, 239));
         if (Build.VERSION.SDK_INT >= 30) {
-            webView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
+            appRoot.setOnApplyWindowInsetsListener((view, windowInsets) -> {
                 android.graphics.Insets systemBars = windowInsets.getInsets(
                         android.view.WindowInsets.Type.systemBars() | android.view.WindowInsets.Type.displayCutout());
                 view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                return windowInsets;
+                return android.view.WindowInsets.CONSUMED;
             });
         }
         WebSettings settings = webView.getSettings();
@@ -117,8 +120,10 @@ public final class MainActivity extends Activity {
                 }
             }
         });
-        setContentView(webView);
-        webView.requestApplyInsets();
+        appRoot.addView(webView, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(appRoot);
+        appRoot.post(appRoot::requestApplyInsets);
         Uri assetUri = Uri.parse("https://appassets.androidplatform.net/assets/index.html");
         webView.loadUrl(assetUri.toString());
     }
