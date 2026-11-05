@@ -40,6 +40,13 @@ async function main() {
 
   const edits = new Uint8Array(width * height).fill(1);
   assert.deepEqual(render(model, { mode: 'original', edits }).data, input);
+
+  const marked = new Uint8Array(width * height);
+  marked[0] = 1;
+  marked[1] = 2;
+  const overlay = render(model, { mode: 'original', edits: marked, maskView: true });
+  assert.deepEqual(Array.from(overlay.data.slice(0, 4)), [50, 160, 245, 255]);
+  assert.deepEqual(Array.from(overlay.data.slice(4, 8)), [220, 82, 112, 255]);
   console.log(`Core test passed: ${removedGridPixels} grid pixels removed; ${protectedInkPixels} ink pixels preserved.`);
 }
 

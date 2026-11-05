@@ -137,6 +137,7 @@
       }
       if (maskView) {
         if (edits && edits[i] === 1) rgb = [50, 160, 245];
+        else if (edits && edits[i] === 2) rgb = [220, 82, 112];
         else if (mask && ink < 1) rgb = [Math.round(input[p]*.4+130), Math.round(input[p+1]*.4+75), Math.round(input[p+2]*.4+25)];
         else rgb = [input[p],input[p+1],input[p+2]];
       }

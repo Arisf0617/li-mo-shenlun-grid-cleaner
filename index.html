@@ -35,7 +35,7 @@
         <h2>03 <span>局部修正</span><em>可选</em></h2>
         <div class="tools"><button id="pan" class="tool active" data-tool="pan" disabled>↔ 拖动画面</button><button id="protect" class="tool" data-tool="protect" disabled>✎ 保护笔迹</button><button id="erase" class="tool" data-tool="erase" disabled>⌫ 清除残线</button><button id="undo" class="tool" disabled>↶ 撤销修正</button></div>
         <div class="brush-row"><label for="brush">笔刷 <output id="brushValue">14 px</output></label><input id="brush" type="range" min="2" max="80" value="14" disabled></div>
-        <p class="hint">保护笔迹可恢复局部原图笔画；清除残线会擦去刷过区域，请避开文字。</p>
+        <p class="hint">选择保护或清除后，画面会用颜色覆盖标出修改范围：蓝色为保护，玫红为手动清除，橙色为算法去格区域。覆盖色只作预览，不会导出；清除时请避开文字。</p>
       </section>
       <details><summary>关于“保留原笔迹”</summary><p>程序没有文字识别、字体替换或生成式重绘。它只分离图像中的印刷格线与深色笔画。白纸模式额外调整纸色和明暗；如需尽量保持原始像素，请用“仅去红格”。</p><p>暗红线与淡笔画完全重叠时，单张照片不能保证无损分离。请放大检查，使用“保护笔迹”恢复有疑问的位置。红色手写内容也可能与格线相近，请手动保护。</p></details>
       <footer>原尺寸导出 · 不裁切、不拉伸、不自动排版</footer>
