@@ -41,11 +41,8 @@ public final class MainActivity extends Activity {
             window.setDecorFitsSystemWindows(false);
             window.setStatusBarColor(android.graphics.Color.TRANSPARENT);
             window.setNavigationBarColor(android.graphics.Color.TRANSPARENT);
-            window.getInsetsController().setSystemBarsAppearance(
-                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                            | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                            | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         } else {
             window.setStatusBarColor(android.graphics.Color.rgb(36, 75, 70));
             window.setNavigationBarColor(android.graphics.Color.rgb(244, 243, 239));
