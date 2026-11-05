@@ -7,7 +7,7 @@
 - **Android**：从 GitHub Releases 下载 `留墨-Android.apk`，在 Android 8.0 或更新版本安装。Android 16 可用。若系统拦截侧载，请在系统设置中允许当前安装来源。
 - **Windows、macOS、Linux**：下载 `留墨.html` 并用最新版 Chrome 或 Edge 打开。该文件独立运行，无需安装、服务器或网络连接。
 - **源码运行**：打开 `index.html`。可选择、拖入或粘贴 JPG、PNG、WebP、BMP 图片；手机浏览器支持时也可直接拍照。处理完成后导出 PNG。
-- Android 首页把“选择图片”和“拍照”并排放置；Android 15/16 会避开状态栏、导航栏与屏幕挖孔区域。
+- Android 首页把“选择图片”和“拍照”并排放置；打开图片后，这两个入口移到图片信息旁。Android 15/16 会避开状态栏、导航栏与屏幕挖孔区域。
 
 ## 功能
 

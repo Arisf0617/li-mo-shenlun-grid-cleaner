@@ -13,8 +13,6 @@
   <header class="topbar">
     <div class="brand"><span class="brand-mark">墨</span><div><strong>留墨</strong><span>申论卷面 · 去红格工具</span></div></div>
     <div class="privacy"><i></i>本机处理，无 OCR，无图片上传</div>
-    <button id="cameraTop" class="button secondary" title="使用相机拍摄卷面">拍照</button>
-    <button id="openTop" class="button secondary">打开图片</button>
     <button id="export" class="button primary" disabled>导出 PNG <span>↗</span></button>
   </header>
   <main>
@@ -40,7 +38,7 @@
       <footer>原尺寸导出 · 不裁切、不拉伸、不自动排版</footer>
     </aside>
     <div class="workspace">
-      <div class="viewer-top"><div class="file-meta"><span class="file-dot"></span><span id="filename">尚未打开图片</span><small id="dimensions"></small></div><div class="view-tabs"><button data-view="result" class="active">处理效果</button><button data-view="compare">滑动对照</button><button data-view="original">原图</button></div></div>
+      <div class="viewer-top"><div class="file-meta"><span class="file-dot"></span><span id="filename">尚未打开图片</span><small id="dimensions"></small></div><div id="fileActions" class="file-actions" hidden><button id="openCurrent" class="button secondary">选择图片</button><button id="cameraCurrent" class="button secondary">拍照</button></div><div class="view-tabs"><button data-view="result" class="active">处理效果</button><button data-view="compare">滑动对照</button><button data-view="original">原图</button></div></div>
       <div class="canvas-area" id="stage">
         <div id="empty" class="empty-state"><div class="paper-icon"><span>文</span></div><h2>把卷面放到这里</h2><p>拖入或粘贴一张照片，开始去除红色格线</p><div class="empty-actions"><button id="openEmpty" class="button primary">选择图片</button><button id="cameraEmpty" class="button secondary">拍照</button></div><small>支持 JPG、PNG、WebP、BMP · 全程在本机处理</small></div>
         <canvas id="canvas" hidden aria-label="卷面图片预览"></canvas>

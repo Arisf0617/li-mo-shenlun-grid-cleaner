@@ -12,6 +12,8 @@ async function main() {
       window.cameraWasRequested = false;
       window.AndroidBridge = { takePhoto: () => { window.cameraWasRequested = true; return true; } };
     });
+    assert.equal(await page.locator('#cameraTop').count(), 0, 'camera action should not be duplicated in the top bar');
+    assert.equal(await page.locator('#openTop').count(), 0, 'image picker should not be duplicated in the top bar');
     await page.locator('#cameraEmpty').click();
     assert.equal(await page.evaluate(() => window.cameraWasRequested), true, 'empty-screen camera button should launch the camera bridge');
     await page.setViewportSize({ width: 390, height: 844 });
@@ -38,6 +40,7 @@ async function main() {
       await openImage(source.toDataURL('image/png'), 'synthetic.png');
     });
     await page.waitForFunction(() => state.ready && !state.busy);
+    assert.equal(await page.locator('#fileActions').isVisible(), true, 'image actions should remain available after opening a photo');
 
     await page.locator('#protect').click();
     await page.locator('#canvas').scrollIntoViewIfNeeded();

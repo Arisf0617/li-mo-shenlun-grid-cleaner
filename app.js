@@ -7,7 +7,7 @@ const resultCanvas = document.createElement('canvas');
 const display = $('canvas'), context = display.getContext('2d');
 let renderTimer, toastTimer;
 function toast(message) { $('toast').textContent=message; $('toast').hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>$('toast').hidden=true,7000); }
-function setBusy(active,label='正在处理',percent=0) { state.busy=active; $('busy').hidden=!active; $('busyLabel').textContent=label; $('progress').value=percent; $('export').disabled=active||!state.ready; for(const id of ['openTop','openEmpty','cameraTop','cameraEmpty']) $(id).disabled=active; }
+function setBusy(active,label='正在处理',percent=0) { state.busy=active; $('busy').hidden=!active; $('busyLabel').textContent=label; $('progress').value=percent; $('export').disabled=active||!state.ready; for(const id of ['openCurrent','openEmpty','cameraCurrent','cameraEmpty']) $(id).disabled=active; }
 function options(maskView=state.mask) { return {mode:document.querySelector('input[name=mode]:checked').value,strength:+$('strength').value,protection:+$('protection').value,whiten:+$('whiten').value,edits:state.edits,maskView}; }
 function enableControls(enabled) { for(const id of ['strength','protection','whiten','pan','protect','erase','maskToggle','zoomOut','zoomIn','fit','actual','rotateLeft','rotateRight']) $(id).disabled=!enabled; $('export').disabled=!enabled||state.busy; $('undo').disabled=!enabled||!state.undo.length; }
 function updateProgress(percent,label) { $('progress').value=percent; $('busyLabel').textContent=label; }
@@ -45,11 +45,11 @@ async function openImage(source,filename,revoke=false) {
   applyRotation();const orientedWidth=originalCanvas.width,orientedHeight=originalCanvas.height;
   state.width=orientedWidth;state.height=orientedHeight;state.edits=new Uint8Array(orientedWidth*orientedHeight);resultCanvas.width=orientedWidth;resultCanvas.height=orientedHeight;
   const pixels=originalCanvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,orientedWidth,orientedHeight);
-  $('empty').hidden=true;display.hidden=false;$('filename').textContent=filename;$('dimensions').textContent=width+' × '+height;
+  $('empty').hidden=true;$('fileActions').hidden=false;display.hidden=false;$('filename').textContent=filename;$('dimensions').textContent=width+' × '+height;
   await prepareEngine(pixels.data,orientedWidth,orientedHeight);state.ready=true;setView('result');fitImage();await refreshResult();enableControls(true);
  }catch(error){
   toast('打开失败：'+(error.message||'文件格式无法读取'));
-  if(committed){state.ready=false;enableControls(false);$('empty').hidden=false;display.hidden=true;}
+  if(committed){state.ready=false;enableControls(false);$('empty').hidden=false;$('fileActions').hidden=true;display.hidden=true;}
   $('status').textContent=state.ready?'上一张图片仍可使用':'未能处理这张图片，请重新选择';
  }finally{setBusy(false);if(revoke)URL.revokeObjectURL(source);}
 }
@@ -73,10 +73,9 @@ function rotateImage(degrees){
  fitImage();
 }
 for(const [id,degrees] of [['rotateLeft',-90],['rotateRight',90]])$(id).addEventListener('click',()=>rotateImage(degrees));
-for(const id of ['openTop','openEmpty'])$(id).addEventListener('click',()=>$('fileInput').click());
-$('cameraTop').addEventListener('click',()=>{if(window.AndroidBridge?.takePhoto){window.AndroidBridge.takePhoto();return;}$('cameraFile').click();});
+for(const id of ['openCurrent','openEmpty'])$(id).addEventListener('click',()=>$('fileInput').click());
 function requestCamera(){if(window.AndroidBridge?.takePhoto){window.AndroidBridge.takePhoto();return;}$('cameraFile').click();}
-$('cameraEmpty').addEventListener('click',requestCamera);
+$('cameraCurrent').addEventListener('click',requestCamera);$('cameraEmpty').addEventListener('click',requestCamera);
 $('fileInput').addEventListener('change',event=>{openFile(event.target.files[0]);event.target.value='';});
 $('cameraFile').addEventListener('change',event=>{openFile(event.target.files[0]);event.target.value='';});
 window.receiveCameraPhoto=url=>openImage(url,'相机拍摄.jpg');
